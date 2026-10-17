@@ -1,0 +1,20 @@
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useServerFn } from '@tanstack/react-start';
+import { useQuery } from '@tanstack/react-query';
+import { FolderOpen, Plus, Sprout, ArrowRight } from 'lucide-react';
+import { listPlans } from '@/lib/plans.functions';
+import { money, type FarmResult } from '@/lib/farm-estimates';
+import { useAccount } from './AccountProvider';
+import { AppShell } from './AppShell';
+import { FarmButton } from './FarmButton';
+
+export function SavedPlans({ history = false }: { history?: boolean }) {
+  const fetchPlans = useServerFn(listPlans); const { user } = useAccount(); const navigate = useNavigate();
+  const query = useQuery({ queryKey: ['farm-plans', user?.id], queryFn: () => fetchPlans(), retry: 1 });
+  return <AppShell><div className="flex flex-wrap items-start justify-between gap-5"><div><p className="text-xs font-bold uppercase text-primary">Your farm workspace</p><h1 className="mt-3 font-display text-4xl">{history ? 'Saved farm plans' : 'Your next crop, with confidence.'}</h1><p className="mt-3 text-sm text-muted-foreground">{history ? 'Your past comparisons, ready to revisit.' : 'Compare your options before you invest.'}</p></div><FarmButton onClick={() => navigate({ to: '/planner' })}><Plus size={17} />Create farm plan</FarmButton></div>
+    {!history && <div className="mt-9 grid grid-cols-2 gap-6 border-y border-border py-6"><div><p className="text-xs text-muted-foreground">Saved plans</p><p className="mt-2 text-3xl font-extrabold text-primary">{query.isPending ? '—' : query.data?.length ?? 0}</p></div><div><p className="text-xs text-muted-foreground">Estimate source</p><p className="mt-2 text-lg font-bold">Transparent heuristics</p><p className="mt-1 text-xs text-muted-foreground">No live market feed connected</p></div></div>}
+    <section className="mt-10"><h2 className="text-xl font-extrabold">{history ? 'Plan history' : 'Recent plans'}</h2>{query.isPending ? <p role="status" className="py-12 text-muted-foreground">Loading your saved plans…</p> : query.isError ? <div className="py-8"><p role="alert" className="text-sm text-destructive">Your plans could not be loaded.</p><FarmButton className="mt-4" variant="secondary" onClick={() => query.refetch()}>Try again</FarmButton></div> : !query.data?.length ? <div className="flex flex-col items-center border-b border-border py-16 text-center"><FolderOpen size={36} className="text-primary" /><h3 className="mt-5 font-display text-2xl">A fresh start for your farm</h3><p className="mt-3 text-sm text-muted-foreground">No saved plans yet.</p><FarmButton className="mt-6" onClick={() => navigate({ to: '/planner' })}><Plus size={16} />Create your first plan</FarmButton></div> : <div className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{(history ? query.data : query.data.slice(0, 6)).map(row => {
+      const result = row.results as unknown as FarmResult; const best = result.crops.find(c => c.crop === result.recommended);
+      return <Link key={row.id} to="/plans/$id" params={{ id: row.id }} className="group rounded-lg border border-border bg-surface p-6 transition hover:border-primary"><div className="flex items-center justify-between text-primary"><Sprout size={23} /><ArrowRight size={18} /></div><h3 className="mt-5 break-words text-lg font-extrabold">{row.location}</h3><p className="mt-2 text-xs text-muted-foreground">{row.land_acres} acres · {new Date(row.created_at).toLocaleDateString('en-IN')}</p><p className="mt-5 text-xs text-muted-foreground">Recommended crop</p><p className="mt-1 text-xl font-bold">{result.recommended ?? 'No budget fit'}</p><div className="mt-4 flex flex-wrap justify-between gap-2 border-t border-border pt-4 text-sm"><span className="font-bold text-success">{best ? money(best.profit) : '—'} <span className="font-normal text-muted-foreground">potential profit</span></span><span className="text-muted-foreground">{best ? `${best.roi}% ROI` : ''}</span></div></Link>;
+    })}</div>}</section></AppShell>;
+}

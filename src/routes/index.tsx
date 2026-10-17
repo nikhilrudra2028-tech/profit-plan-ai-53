@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, BarChart3, Check, ChevronRight, CloudSun, IndianRupee, Leaf, MapPin, Menu, ShieldCheck, Sparkles, Sprout, Target, TrendingUp, Users, X, Zap, type LucideIcon } from "lucide-react";
 import heroImage from "../assets/farmprofit-hero.jpg";
 import { FarmButton } from "../components/FarmButton";
+import { useAccount } from "../components/AccountProvider";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -45,6 +46,8 @@ function SectionHeading({ eyebrow, title, copy }: { eyebrow: string; title: stri
 
 function FarmProfitPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAccount();
   return <main className="overflow-hidden bg-background">
     <header className="absolute inset-x-0 top-0 z-20 border-b border-surface/20 text-primary-foreground"><div className="section-shell flex h-20 items-center justify-between"><Logo /><nav className="hidden items-center gap-6 lg:flex">{nav.map(({label,id}) => <button key={id} onClick={() => scrollTo(id)} className="text-sm font-semibold opacity-85 transition hover:opacity-100">{label}</button>)}</nav><FarmButton variant="light" className="hidden lg:inline-flex" onClick={() => scrollTo("planner")}>Create My Farm Plan <ArrowRight size={16}/></FarmButton><button aria-label="Toggle navigation" className="grid size-11 place-items-center lg:hidden" onClick={() => setMenuOpen(v => !v)}>{menuOpen ? <X/> : <Menu/>}</button></div>{menuOpen && <nav className="border-t border-surface/20 bg-primary px-5 py-5 lg:hidden">{nav.map(({label,id}) => <button key={id} onClick={() => { scrollTo(id); setMenuOpen(false); }} className="block w-full py-3 text-left text-sm font-bold">{label}</button>)}<FarmButton variant="light" className="mt-3 w-full" onClick={() => scrollTo("planner")}>Create My Farm Plan</FarmButton></nav>}</header>
 
