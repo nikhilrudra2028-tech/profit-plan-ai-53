@@ -32,7 +32,7 @@ export function estimateFarm(raw: FarmInput): FarmResult {
     const yieldKg = Math.round(model.kg * input.land * yieldFactor);
     const revenue = Math.round(yieldKg * model.price);
     const profit = revenue - investment;
-    const risk = model.water ? (input.irrigation === 'Reliable irrigation' && rotationFactor === 1 ? 'Medium' : 'High') : (yieldFactor >= 0.8 ? 'Low' : 'Medium');
+    const risk: CropEstimate['risk'] = model.water ? (input.irrigation === 'Reliable irrigation' && rotationFactor === 1 ? 'Medium' : 'High') : (yieldFactor >= 0.8 ? 'Low' : 'Medium');
     return { crop: model.crop, investment, revenue, profit, roi: Math.round(profit / investment * 1000) / 10, risk, affordable: investment <= input.budget, yieldKg, pricePerKg: model.price, yieldFactor, reason: `${model.soils.includes(input.soil) ? 'Preferred' : input.soil === 'Not sure' ? 'Unverified' : 'Non-preferred'} soil; ${input.irrigation.toLowerCase()}${rotationFactor < 1 ? '; repeat-crop yield reduction applied' : ''}.` };
   }).sort((a, b) => Number(b.affordable) - Number(a.affordable) || b.profit - a.profit);
   const best = crops.find(crop => crop.affordable && crop.profit > 0);
