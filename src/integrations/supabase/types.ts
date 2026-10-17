@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      farm_plans: {
+        Row: {
+          budget: number
+          calculation_version: string
+          created_at: string
+          id: string
+          irrigation: string
+          land_acres: number
+          location: string
+          previous_crop: string
+          results: Json
+          soil_type: string
+          user_id: string
+        }
+        Insert: {
+          budget: number
+          calculation_version?: string
+          created_at?: string
+          id?: string
+          irrigation: string
+          land_acres: number
+          location: string
+          previous_crop: string
+          results: Json
+          soil_type: string
+          user_id?: string
+        }
+        Update: {
+          budget?: number
+          calculation_version?: string
+          created_at?: string
+          id?: string
+          irrigation?: string
+          land_acres?: number
+          location?: string
+          previous_crop?: string
+          results?: Json
+          soil_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

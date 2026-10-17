@@ -8,3 +8,8 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Use generated Cloud Auth and its pathless authenticated layout for personal routes; keep the marketing route public to separate private UI from crawlable content.
+- Store complete plan input and result snapshots in owner-scoped Cloud rows; RLS is the authoritative access boundary.
+- Keep versioned deterministic crop estimates in a shared pure module with unit tests so demonstration figures remain reproducible and explainable.
+- Maintain a single root account-state subscriber for identity changes and clear cached private queries before sign-out to prevent stale private UI.
