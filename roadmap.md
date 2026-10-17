@@ -1,6 +1,6 @@
 # FarmProfit MVP
 
-- [ ] Confirm whether additional user profiles are required.
+- [x] Use authenticated account name/email only; no extra profiles, avatars, or preferences.
 - [ ] Enable and verify Cloud authentication and Google provider configuration.
 - [ ] Add branded login/signup/reset and session-aware navigation.
 - [ ] Protect planner, dashboard, and saved history while retaining public landing.

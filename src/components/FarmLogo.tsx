@@ -1,0 +1,2 @@
+import { Leaf } from 'lucide-react';
+export function FarmLogo() { return <span className="flex items-center gap-2 text-lg font-extrabold"><span className="grid size-9 place-items-center rounded-md bg-primary text-primary-foreground"><Leaf size={19} /></span>FarmProfit</span>; }
