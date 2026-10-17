@@ -1,5 +1,7 @@
 # FarmProfit MVP
 
+- [ ] Recheck current build/runtime status, hosted auth settings, and public end-to-end behavior; preserve design and paid settings.
+
 - [x] Use authenticated account name/email only; no extra profiles, avatars, or preferences.
 - [x] Enable Cloud authentication and configure Google provider.
 - [x] Add branded login/signup/reset and session-aware navigation.
